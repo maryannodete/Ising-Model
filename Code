@@ -1,0 +1,35 @@
+#2D Lattice
+import numpy as np
+import matplotlib.pyplot as plt
+
+def lattice(image_shape, lattice_vectors):
+    center_pix = np.array(image_shape) // 2
+    dx_cell = max(abs(lattice_vectors[0][0]), abs(lattice_vectors[1][0]))
+    dy_cell = max(abs(lattice_vectors[0][1]), abs(lattice_vectors[1][1]))
+    nx = image_shape[0]//dx_cell
+    ny = image_shape[1]//dy_cell
+    x_sq = np.arange(-nx, nx, dtype=float)
+    y_sq = np.arange(-ny, nx, dtype=float)
+    x_sq.shape = x_sq.shape + (1,)
+    y_sq.shape = (1,) + y_sq.shape
+    x_lattice = lattice_vectors[0][0]*x_sq + lattice_vectors[1][0]*y_sq
+    y_lattice = lattice_vectors[0][1]*x_sq + lattice_vectors[1][1]*y_sq
+    mask = ((x_lattice < image_shape[0]/2.0)
+             & (x_lattice > -image_shape[0]/2.0))
+    mask = mask & ((y_lattice < image_shape[1]/2.0)
+                    & (y_lattice > -image_shape[1]/2.0))
+    x_lattice = x_lattice[mask]
+    y_lattice = y_lattice[mask]
+    x_lattice += center_pix[0]
+    y_lattice += center_pix[1]
+    out = np.empty((len(x_lattice), 2), dtype=float)
+    out[:, 0] = y_lattice
+    out[:, 1] = x_lattice
+    return out
+lattice_vectors = [
+    np.array([-40., -1.]),
+    np.array([ 18., -37.])]
+image_shape = (1000, 1000)
+spots = lattice(image_shape, lattice_vectors)
+print(spots)
+  
