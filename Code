@@ -33,3 +33,19 @@ image_shape = (1000, 1000)
 spots = lattice(image_shape, lattice_vectors)
 print(spots)
   
+#Magnetic Moments
+n = len(spots)
+x = random.sample(range(0, 1000), n)
+m = 0
+l = np.zeros(n)
+
+while m in range(n - 1):
+    m = m + 1
+    if x[m] % 2 == 0: #even
+        l[m] = 1
+    else: #odd
+        l[m] = 0
+y = np.count_nonzero(l == 1)
+x = np.count_nonzero(l == 0)
+print(y)
+print(x)
